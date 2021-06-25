@@ -1,0 +1,65 @@
+LookAt 200 250 70   0 33 -50   0 0 1
+Camera "perspective" "float fov" [38]
+Film "image"
+	"integer xresolution" [684] "integer yresolution" [513]
+    "string filename" ["spheresTest.exr" ]
+    
+Sampler "halton" "integer pixelsamples" 8
+
+Integrator "directlighting"
+    
+WorldBegin
+AttributeBegin
+Material "matte" "color Kd" [0 0 0]
+AreaLightSource "area"  "color L" [400 400 400] "integer nsamples" [8]
+Translate 0 0 800
+ReverseOrientation
+Shape "disk" "float radius" [40]
+AttributeEnd
+
+AttributeBegin
+  Material "matte" "color Kd" [.5 .5 .5]
+  Translate 0 0 -140
+  Texture "grid" "color" "imagemap" "string filename" ["textures/stripespot256.png"]
+  Texture "sgrid" "color" "scale" "texture tex1" "grid" "color tex2" [ .5 .5 .5 ]
+  Material "matte" "texture Kd" "sgrid"
+  Shape "trianglemesh" "point P" [ -400 -400 0 400 -400 0 400 400 0 -400 400 0 ]
+      "float uv" [ 0 0 5 0 5 5 0 5 ]
+	"integer indices" [ 0 1 2 2 3 0]
+  Shape "trianglemesh" "point P" [ -400 -400 0 400 -400 0
+	400 -400  1000 -400 -400 1000 ]
+      "float uv" [ 0 0 5 0 5 5 0 5 ]
+	"integer indices" [ 0 1 2 2 3 0]
+  Shape "trianglemesh" "point P" [ -400 -400 0 -400 400 0  -400 400 1000 -400 -400 1000 ]
+      "float uv" [ 0 0 5 0 5 5 0 5 ]
+	"integer indices" [ 0 1 2 2 3 0]
+  Shape "trianglemesh" "point P" [ -400 400 0 400 400 0
+	400 400  1000 -400 400 1000 ]
+      "float uv" [ 0 0 5 0 5 5 0 5 ]
+	"integer indices" [ 0 1 2 2 3 0]
+  Shape "trianglemesh" "point P" [ 400 -400 0 400 400 0  400 400 1000 400 -400 1000 ]
+      "float uv" [ 0 0 5 0 5 5 0 5 ]
+	"integer indices" [ 0 1 2 2 3 0]
+AttributeEnd
+
+AttributeBegin
+  Material "ellipsoid" 
+    "color lambertian_albedo" [.03 .03 .06] 
+    "color ellip0_scale" [0.2 0.2 0.2]
+    "color ellip0_S_diagonals" [10 10 1]
+    "color ellip0_S_offdiagonals" [0, 0, 0]
+  Translate 0 -100 -70
+  Shape "sphere" "float radius" [70]
+
+#  Material "ellipsoid" 
+    "color lambertian_albedo" [.06 .03 .03] 
+    "color ellip0_scale" [0.2 0.2 0.2]
+    "color ellip0_S_diagonals" [10 40 1]
+    "color ellip0_S_offdiagonals" [0, 0, 0]
+  Translate -130 125 0
+  Shape "sphere" "float radius" [70]
+AttributeEnd
+
+WorldEnd
+
+

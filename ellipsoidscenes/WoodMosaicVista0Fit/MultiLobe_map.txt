@@ -1,0 +1,23 @@
+#Fitted BRDF Map Description
+#Sat Jan 23 08:14:57 EST 2021
+BRDFMapType=MultiLobeMap
+map.width=3492
+map.height=2330
+dataset.width=3492
+dataset.height=2330
+dataset.name=G\:\\bruce\\WoodMosaicVista0\\hdrdense1.5\\GantryStateLog.txt
+hasSeparateLambertianComponent=true
+lambertian.albedo=MultiLobe_lambertian_albedo.exr
+lambertian.fit.method=2ndQuartileAvg
+lobeCount=2
+lobe0.Type=EllipsoidLobe
+lobe0.scaling=MultiLobe_lobe0_scaling.exr
+lobe0.matrixS.diagonals=MultiLobe_lobe0_SDiagonals.exr
+lobe0.matrixS.offDiagonals=MultiLobe_lobe0_SOffDiagonals.exr
+lobe1.Type=EllipsoidLobe
+lobe1.scaling=MultiLobe_lobe1_scaling.exr
+lobe1.matrixS.diagonals=MultiLobe_lobe1_SDiagonals.exr
+lobe1.matrixS.offDiagonals=MultiLobe_lobe1_SOffDiagonals.exr
+fit.useFinalColorFit=true
+fit.maxIterations=20
+fit.rmsErrorImage=MultiLobe_map_rmsError.exr
