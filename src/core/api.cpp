@@ -115,6 +115,9 @@
 #include "media/grid.h"
 #include "media/homogeneous.h"
 
+//new include needed for ellipsoid material model
+#include "ellipsoid/ellipsoid.h"
+
 #include <map>
 #include <stdio.h>
 
@@ -586,6 +589,10 @@ std::shared_ptr<Material> MakeMaterial(const std::string &name,
         material = CreateKdSubsurfaceMaterial(mp);
     else if (name == "fourier")
         material = CreateFourierMaterial(mp);
+//new code added for ellipsoid material
+    else if (name == "ellipsoid")
+        material = CreateEllipsoidSMaterial(mp);
+//end of new ellipsoid code
     else {
         Warning("Material \"%s\" unknown. Using \"matte\".", name.c_str());
         material = CreateMatteMaterial(mp);
