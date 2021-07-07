@@ -1,3 +1,31 @@
+﻿# Ellipsoid Fork of PBRT3
+This repository holds a version of pbrt that has been modified to render the ellipsoid BRDF model and ellipsoid textures encoded as S (symmetric) matrices.
+
+The new code is contained in the new *src/ellipsoid* folder and some sample scenes in the new *ellipsoidscenes* folder.  The only other change is in the src/core/api.c file to enable loading of ellipsoid materials.
+
+The purpose of this fork is to provide sample code and examples for implementing ellipsoid BRDF and textures in other rendering systems.  If you do render with PBRT, there are a few quirks to be aware of:
+
+ - Ellipsoid S textures are stored in a non-linear space so interpolation/resampling may sometimes cause unexpected results.  Also when using multi-lobed ellipsoid textures, the lobes can be swapped between neighboring textures.  PBRT always resamples textures to powers of two sizes and performs texture anti-aliasing.
+ - Textures were captured using a fixed camera and ideally would be applied as projective textures, but PBRT does not support this.  Instead I'm using a meshes with vertex-interpolated UV coordinates, which hopefully is close enough.
+## Usage
+This version can be compiled and run using the same methods as the standard pbrt code.
+
+After compiling (optimized compile strongly recommended), you can run the provided sample scenes to test the code by typing the following commands (adjusting the paths as needed for your configuration):
+
+Running
+
+    ./pbrt ellipsoidscenes/spheresTest.pbrt
+should generate an image called spheresTest.exr with two spheres (one isotropic and one anisotropic).
+
+Running
+
+    ./pbrt ellipsoidscenes/woodTest.pbrt
+should generate an image called woodTest.exr with an image of a wood mosaic scene.
+
+========================
+
+
+
 pbrt, Version 3
 ===============
 
