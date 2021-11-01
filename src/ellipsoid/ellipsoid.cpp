@@ -56,6 +56,8 @@ void EllipsoidSReflection::computeSInverse() {
 
 // compute the shadowing/masking factor (note: uses value of inverseS)
 Float EllipsoidSReflection::computeShadMask(const Vector3f &wo, const Vector3f &wi) const {
+    const bool useBlackVertical = true;   //use shadow/masking variant with extra vertical black "microfacets" so that mean normal matches macro-surface normal
+    const bool useHeightCorrelatedShadMask = false;  //use height correlated version of bidirectional shadow/masking
     //note that the surface normal in local coordinate is +Z (ie n = 0,0,1)
     //and that invS is proportional to (A^T)*A and that
     //since the fraction is invariant to scalings of A, we can use invS in place of (A^T)*T
@@ -66,10 +68,23 @@ Float EllipsoidSReflection::computeShadMask(const Vector3f &wo, const Vector3f &
     Float lAAl = compute_vSv(invSdiagonals, invSoffdiagonals, wi);
     Float vAAn = compute_zdirSv(invSdiagonals, invSoffdiagonals, wo);
     Float lAAn = compute_zdirSv(invSdiagonals, invSoffdiagonals, wi);
-    Float Gv = 2*nAAn*absCosView / (sqrt(vAAv*nAAn) + vAAn);
-    Float Gl = 2*nAAn*absCosLight / (sqrt(lAAl*nAAn) + lAAn);
-    if (Gv > 1.0) Gv = 1.0;
-    if (Gl > 1.0) Gl = 1.0;
+    Float numeratorV = 2*nAAn*absCosView;
+    Float numeratorL = 2*nAAn*absCosLight;
+    if (CosTheta(wo) < 0) { vAAn = -vAAn; }  //Not totally sure handling of directions from backside is correct, needs testing
+    if (CosTheta(wi) < 0) { lAAn = -lAAn; }
+    Float Gv, Gl;
+    if (useBlackVertical) {
+        Gv = numeratorV / ( sqrt(vAAv*nAAn) + std::max(vAAn, numeratorV-vAAn) );
+        Gl = numeratorL / ( sqrt(lAAl*nAAn) + std::max(lAAn, numeratorL-lAAn) );
+    } else {
+        Gv = numeratorV / (sqrt(vAAv*nAAn) + vAAn);
+        Gl = numeratorL / (sqrt(lAAl*nAAn) + lAAn);
+        if (Gv > 1.0) Gv = 1.0;
+        if (Gl > 1.0) Gl = 1.0;
+    }
+    if (useHeightCorrelatedShadMask) {
+        return Gv*Gl / (Gv + Gl - Gv*Gl);
+    }
     return Gv*Gl;
 }
 
